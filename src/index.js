@@ -1,13 +1,12 @@
-module.exports = function (testAPI) {
-    testAPI = testAPI || {};
-    var eventListeners = {};
+module.exports = function (obj, eventListeners) {
+    obj = obj || {};
+    eventListeners = eventListeners || {};
     function addEventListener(event, func) {
         if (typeof func === "function") {
             eventListeners[event] = eventListeners[event] || [];
             eventListeners[event].push(func);
         }
     }
-    testAPI.getListeners = function () { return eventListeners; };
     function removeEventListener(event, func) {
         var listeners = eventListeners[event] || [],
             i,
@@ -35,10 +34,8 @@ module.exports = function (testAPI) {
             getFunction(loop[j])(event);
         }
     }
-    if (testAPI) { testAPI.eventListeners = eventListeners; }
-    return {
-        addEventListener : addEventListener,
-        removeEventListener : removeEventListener,
-        dispatchEvent : dispatchEvent
-    };
+    obj.addEventListener = addEventListener;
+    obj.removeEventListener = removeEventListener;
+    obj.dispatchEvent = dispatchEvent;
+    return obj;
 };
